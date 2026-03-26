@@ -43,6 +43,9 @@ const STATE_RECHECK_INTERVAL_MS = 60_000;
 // Interval between category button image changes when multiple images are uploaded (ms)
 const BUTTON_IMAGE_CYCLE_MS = 30_000;
 
+// Crossfade duration for button image cycling (ms)
+const BUTTON_IMAGE_FADE_MS = 2_000;
+
 // Placeholder logo shown when company logo URL is missing or fails to load
 const PLACEHOLDER_LOGO_SRC = "assets/icons/placeholder-logo.svg";
 

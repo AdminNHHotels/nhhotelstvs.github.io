@@ -111,20 +111,46 @@ function _renderCategoryButtons(deviceConfig, categories) {
       : (cat.button_image_url ? [cat.button_image_url] : []);
 
     if (images.length > 0) {
-      const img = document.createElement("img");
-      img.src       = images[0];
-      img.alt       = cat.label || key;
-      img.className = "cat-btn-img";
-      btn.appendChild(img);
-
-      // Start cycling only when more than one image is available
       if (images.length > 1) {
+        // Two stacked images that crossfade between each other
+        const wrap = document.createElement("div");
+        wrap.className = "cat-btn-img-wrap";
+
+        const imgA = document.createElement("img");
+        imgA.src       = images[0];
+        imgA.alt       = cat.label || key;
+        imgA.className = "cat-btn-img";
+        imgA.style.opacity = "1";
+
+        const imgB = document.createElement("img");
+        imgB.alt       = cat.label || key;
+        imgB.className = "cat-btn-img";
+        imgB.style.opacity = "0";
+
+        wrap.appendChild(imgA);
+        wrap.appendChild(imgB);
+        btn.appendChild(wrap);
+
         let idx = 0;
+        // front/back alternate each cycle
+        let front = imgA, back = imgB;
         const intervalId = setInterval(() => {
           idx = (idx + 1) % images.length;
-          img.src = images[idx];
+          back.src = images[idx];
+          front.style.transition = `opacity ${BUTTON_IMAGE_FADE_MS}ms ease`;
+          back.style.transition  = `opacity ${BUTTON_IMAGE_FADE_MS}ms ease`;
+          front.style.opacity = "0";
+          back.style.opacity  = "1";
+          // Swap roles for the next cycle
+          [front, back] = [back, front];
         }, BUTTON_IMAGE_CYCLE_MS);
         _btnCycleIntervals.push(intervalId);
+      } else {
+        const img = document.createElement("img");
+        img.src       = images[0];
+        img.alt       = cat.label || key;
+        img.className = "cat-btn-img";
+        btn.appendChild(img);
       }
     } else {
       btn.textContent = cat.label || key;
