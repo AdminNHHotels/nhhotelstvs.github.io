@@ -19,7 +19,10 @@
   --font-event-time:    1.4rem;
   --font-cat-btn:       1.08rem;
   --font-cinzel:        'Cinzel', Georgia, serif;
+  --font-roboto:        'Roboto', 'Segoe UI', Arial, sans-serif;
+  --font-comfortaa:     'Comfortaa', 'Segoe UI', Arial, sans-serif;
   --font-body:          'Inter', 'Segoe UI', Arial, sans-serif;
+  --frame-color:        #1e4d4b;
 
   --transition-slide:   300ms ease;
   --transition-fade:    500ms ease;
@@ -36,6 +39,10 @@ html, body {
   color: var(--text-primary);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+}
+
+body {
+  box-shadow: inset 0 0 0 4px var(--frame-color);
 }
 
 /* Kiosk: no cursor (only when data-kiosk="true" on body), no text selection */
@@ -143,7 +150,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.5);
   color: #111;
 }
 
@@ -206,11 +213,12 @@ body {
   vertical-align: middle;
   border-right: 1px solid var(--event-col-divider);
 }
-.event-room-name { display: block; font-family: var(--font-cinzel); font-size: var(--font-event-room); font-weight: 700; }
-.event-note      { display: block; font-size: 0.8em; color: var(--text-secondary); margin-top: 0.2em; }
+.event-room-name { display: block; font-family: var(--font-roboto); font-size: var(--font-event-room); font-weight: 700; }
+.event-note      { display: block; font-family: var(--font-comfortaa); font-size: 0.8em; color: var(--text-secondary); margin-top: 0.2em; }
 
 .event-time {
   padding: 0.8em 1em;
+  font-family: var(--font-comfortaa);
   font-size: var(--font-event-time);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -222,7 +230,7 @@ body {
 .event-direction { padding: 0.8em 1em; text-align: center; vertical-align: middle; }
 .direction-cell  { display: flex; flex-direction: column; align-items: center; gap: 0.3em; }
 .direction-icon  { width: 36px; height: 36px; }
-.direction-label { font-size: var(--font-event-time); white-space: nowrap; }
+.direction-label { font-family: var(--font-comfortaa); font-size: var(--font-event-time); white-space: nowrap; }
 
 .events-empty {
   color: var(--text-secondary);
