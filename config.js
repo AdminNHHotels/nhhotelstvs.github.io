@@ -49,15 +49,15 @@ const BUTTON_IMAGE_FADE_MS = 2_000;
 // Placeholder logo shown when company logo URL is missing or fails to load
 const PLACEHOLDER_LOGO_SRC = "assets/icons/placeholder-logo.svg";
 
-// Direction labels and icons (Czech localization)
+// Direction labels and icons
 const DIRECTION_MAP = {
-  north:     { icon: "assets/icons/arrow-north.svg",     label: "Rovně"        },
-  northeast: { icon: "assets/icons/arrow-northeast.svg", label: "Nahoru vpravo" },
-  east:      { icon: "assets/icons/arrow-east.svg",      label: "Vpravo"       },
-  southeast: { icon: "assets/icons/arrow-southeast.svg", label: "Dolu vpravo"  },
-  south:     { icon: "assets/icons/arrow-south.svg",     label: "Dolů"         },
-  southwest: { icon: "assets/icons/arrow-southwest.svg", label: "Dolu vlevo"   },
-  west:      { icon: "assets/icons/arrow-west.svg",      label: "Vlevo"        },
-  northwest: { icon: "assets/icons/arrow-northwest.svg", label: "Nahoru vlevo" },
-  elevator:  { icon: "assets/icons/elevator.svg",        label: "Výtah"        },
+  north:     { icon: "assets/icons/arrow-north.svg",     label: "Straight"     },
+  northeast: { icon: "assets/icons/arrow-northeast.svg", label: "Up Right"     },
+  east:      { icon: "assets/icons/arrow-east.svg",      label: "Right"        },
+  southeast: { icon: "assets/icons/arrow-southeast.svg", label: "Down Right"   },
+  south:     { icon: "assets/icons/arrow-south.svg",     label: "Down"         },
+  southwest: { icon: "assets/icons/arrow-southwest.svg", label: "Down Left"    },
+  west:      { icon: "assets/icons/arrow-west.svg",      label: "Left"         },
+  northwest: { icon: "assets/icons/arrow-northwest.svg", label: "Up Left"      },
+  elevator:  { icon: "assets/icons/elevator.svg",        label: "Elevator"     },
 };
