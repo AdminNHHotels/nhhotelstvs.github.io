@@ -38,6 +38,9 @@ html, body {
 /* Kiosk: no cursor, no text selection */
 * { cursor: none !important; user-select: none; }
 
+/* Ensure [hidden] attribute always wins over display:flex on overlays */
+[hidden] { display: none !important; }
+
 /* ── Page layout ───────────────────────────────────────────────────────── */
 body {
   display: grid;
