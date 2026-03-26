@@ -17,7 +17,9 @@
   --font-heading:       2.6rem;
   --font-event-room:    1.6rem;
   --font-event-time:    1.4rem;
-  --font-cat-btn:       0.9rem;
+  --font-cat-btn:       1.08rem;
+  --font-cinzel:        'Cinzel', Georgia, serif;
+  --font-body:          'Inter', 'Segoe UI', Arial, sans-serif;
 
   --transition-slide:   300ms ease;
   --transition-fade:    500ms ease;
@@ -32,7 +34,7 @@ html, body {
   overflow: hidden;
   background: var(--bg-dark);
   color: var(--text-primary);
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -70,7 +72,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  padding: 1rem 0.75rem;
   background: var(--bg-card);
   border-bottom: 1px solid var(--cat-btn-border);
   overflow-x: auto;
@@ -82,18 +84,16 @@ body {
   flex: 1 1 0;
   min-width: 80px;
   max-width: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
+  position: relative;
+  height: 120px;
+  overflow: hidden;
   background: var(--cat-btn-bg);
   border: 1px solid var(--cat-btn-border);
   border-radius: 8px;
   color: var(--text-primary);
   font-size: var(--font-cat-btn);
   font-weight: 600;
-  padding: 0.4rem 0.3rem;
+  padding: 0;
   transition: background var(--transition-press), transform var(--transition-press), box-shadow var(--transition-press);
 }
 
@@ -110,24 +110,50 @@ body {
 }
 
 .cat-btn-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 60px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 4px;
 }
 
 .cat-btn-img-wrap {
-  position: relative;
-  width: 100%;
-  height: 60px;
-  border-radius: 4px;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
 .cat-btn-img-wrap .cat-btn-img {
   position: absolute;
   inset: 0;
+  width: 100%;
   height: 100%;
+}
+
+.cat-btn-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: var(--font-cinzel);
+  font-size: var(--font-cat-btn);
+  font-weight: 700;
+  text-align: center;
+  padding: 0.35em 0.5em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(255, 255, 255, 0.88);
+  color: #111;
+}
+
+/* No-image variant: center label vertically */
+.cat-btn--no-image .cat-btn-label {
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
 }
 
 /* ── Main content area ─────────────────────────────────────────────────── */
@@ -151,6 +177,7 @@ body {
 .events-table th {
   background: #ffffff;
   color: var(--text-secondary);
+  font-family: var(--font-cinzel);
   font-size: 0.85em;
   font-weight: 600;
   text-align: center;
@@ -179,7 +206,7 @@ body {
   vertical-align: middle;
   border-right: 1px solid var(--event-col-divider);
 }
-.event-room-name { display: block; font-size: var(--font-event-room); font-weight: 700; }
+.event-room-name { display: block; font-family: var(--font-cinzel); font-size: var(--font-event-room); font-weight: 700; }
 .event-note      { display: block; font-size: 0.8em; color: var(--text-secondary); margin-top: 0.2em; }
 
 .event-time {
@@ -360,12 +387,10 @@ body {
   --font-heading:    3.2rem;
   --font-event-room: 2.0rem;
   --font-event-time: 1.7rem;
-  --font-cat-btn:    1.0rem;
+  --font-cat-btn:    1.2rem;
 }
 
-[data-size="small"] .cat-btn { min-width: 100px; }
-[data-size="small"] .cat-btn-img,
-[data-size="small"] .cat-btn-img-wrap { height: 70px; }
+[data-size="small"] .cat-btn { min-width: 100px; height: 140px; }
 [data-size="small"] .event-logo img { width: 130px; height: 75px; }
 [data-size="small"] .direction-icon { width: 42px; height: 42px; }
 [data-size="small"] .gallery-nav-btn { width: 75px; height: 75px; font-size: 2.8rem; }

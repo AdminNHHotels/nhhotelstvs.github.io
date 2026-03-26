@@ -62,7 +62,7 @@ function _buildTable(reservations) {
 
   const thead = table.createTHead();
   const hr = thead.insertRow();
-  ["", "Room / Note", "Time", "Direction"].forEach((h) => {
+  ["Company", "Room / Note", "Time", "Direction"].forEach((h) => {
     const th = document.createElement("th");
     th.textContent = h;
     hr.appendChild(th);

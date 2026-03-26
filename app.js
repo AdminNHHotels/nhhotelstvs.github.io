@@ -153,8 +153,14 @@ function _renderCategoryButtons(deviceConfig, categories) {
         btn.appendChild(img);
       }
     } else {
-      btn.textContent = cat.label || key;
+      btn.classList.add("cat-btn--no-image");
     }
+
+    // Label always visible — overlaid at bottom when image present, centered when not
+    const labelSpan = document.createElement("span");
+    labelSpan.className   = "cat-btn-label";
+    labelSpan.textContent = cat.label || key;
+    btn.appendChild(labelSpan);
 
     btn.addEventListener("click", () => {
       showFeedback(btn);
