@@ -35,8 +35,9 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Kiosk: no cursor, no text selection */
-* { cursor: none !important; user-select: none; }
+/* Kiosk: no cursor (only when data-kiosk="true" on body), no text selection */
+* { user-select: none; }
+body[data-kiosk="true"] * { cursor: none !important; }
 
 /* Ensure [hidden] attribute always wins over display:flex on overlays */
 [hidden] { display: none !important; }
