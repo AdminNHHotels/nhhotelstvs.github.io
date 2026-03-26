@@ -175,6 +175,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.2em;
+  vertical-align: middle;
 }
 .event-room-name { font-size: var(--font-event-room); font-weight: 700; }
 .event-note      { font-size: 0.8em; color: var(--text-secondary); }
