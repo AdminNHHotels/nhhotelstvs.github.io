@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Up arrow (top half) -->
+  <polygon points="40,6 60,28 50,28 50,40 30,40 30,28 20,28" fill="#000000"/>
+  <!-- Down arrow (bottom half) -->
+  <polygon points="40,74 60,52 50,52 50,40 30,40 30,52 20,52" fill="#000000"/>
+</svg>
