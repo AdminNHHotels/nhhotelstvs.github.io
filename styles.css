@@ -35,8 +35,9 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Kiosk: no cursor, no text selection */
-* { cursor: none !important; user-select: none; }
+/* Kiosk: no cursor (only when data-kiosk="true" on body), no text selection */
+* { user-select: none; }
+body[data-kiosk="true"] * { cursor: none !important; }
 
 /* Ensure [hidden] attribute always wins over display:flex on overlays */
 [hidden] { display: none !important; }
@@ -51,7 +52,7 @@ body {
     "main";
   height: 100vh;
 }
- 
+
 /* ── Heading ───────────────────────────────────────────────────────────── */
 .page-heading {
   grid-area: heading;
@@ -63,11 +64,12 @@ body {
   letter-spacing: 0.06em;
   padding: 0.55em 1em;
 }
- 
+
 /* ── Category button bar ───────────────────────────────────────────────── */
 #category-buttons {
   grid-area: nav;
   display: flex;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   background: var(--bg-card);
@@ -76,7 +78,7 @@ body {
   scrollbar-width: none;
 }
 #category-buttons::-webkit-scrollbar { display: none; }
- 
+
 .cat-btn {
   flex: 1 1 0;
   min-width: 80px;
@@ -95,26 +97,40 @@ body {
   padding: 0.4rem 0.3rem;
   transition: background var(--transition-press), transform var(--transition-press), box-shadow var(--transition-press);
 }
- 
+
 .cat-btn.active {
   background: var(--cat-btn-active-bg);
   border-color: var(--heading-color);
   box-shadow: 0 0 0 2px var(--heading-color);
 }
- 
+
 .cat-btn.pressed {
   transform: scale(0.96);
   filter: brightness(0.85);
   box-shadow: 0 0 0 2px var(--heading-color);
 }
- 
+
 .cat-btn-img {
   width: 100%;
   height: 60px;
   object-fit: cover;
   border-radius: 4px;
 }
- 
+
+.cat-btn-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cat-btn-img-wrap .cat-btn-img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
 /* ── Main content area ─────────────────────────────────────────────────── */
 #main-content {
   grid-area: main;
@@ -124,7 +140,7 @@ body {
   align-items: center;
   justify-content: center;
 }
- 
+
 /* ── EVENTS state ──────────────────────────────────────────────────────── */
 .events-table {
   width: 100%;
@@ -132,7 +148,7 @@ body {
   border-collapse: collapse;
   font-size: var(--font-event-room);
 }
- 
+
 .events-table th {
   background: var(--bg-card);
   color: var(--text-secondary);
@@ -144,44 +160,43 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
- 
+
 .event-row {
   border-bottom: 1px solid var(--event-row-border);
   transition: background 200ms;
 }
 .event-row:nth-child(even) { background: var(--bg-card); }
- 
+
 .event-logo { padding: 0.8em 1em; width: 140px; }
 .event-logo img { width: 110px; height: 60px; object-fit: contain; }
- 
+
 .event-room {
   padding: 0.8em 1em;
   display: flex;
   flex-direction: column;
   gap: 0.2em;
-  vertical-align: middle;
 }
 .event-room-name { font-size: var(--font-event-room); font-weight: 700; }
 .event-note      { font-size: 0.8em; color: var(--text-secondary); }
- 
+
 .event-time {
   padding: 0.8em 1em;
   font-size: var(--font-event-time);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
- 
+
 .event-direction { padding: 0.8em 1em; }
 .direction-cell  { display: flex; align-items: center; gap: 0.5em; }
 .direction-icon  { width: 36px; height: 36px; filter: invert(1); }
 .direction-label { font-size: var(--font-event-time); white-space: nowrap; }
- 
+
 .events-empty {
   color: var(--text-secondary);
   font-size: 1.4rem;
   text-align: center;
 }
- 
+
 /* ── DEFAULT_CAROUSEL state ────────────────────────────────────────────── */
 .carousel-slide {
   position: absolute;
@@ -190,13 +205,13 @@ body {
   align-items: center;
   justify-content: center;
 }
- 
+
 .carousel-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
- 
+
 .carousel-label {
   position: absolute;
   bottom: 1.5rem;
@@ -211,7 +226,7 @@ body {
   letter-spacing: 0.04em;
   pointer-events: none;
 }
- 
+
 /* ── GALLERY_MANUAL state ──────────────────────────────────────────────── */
 .gallery-image-wrap {
   position: relative;
@@ -222,20 +237,20 @@ body {
   align-items: center;
   justify-content: center;
 }
- 
+
 .gallery-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   transition: transform var(--transition-slide);
 }
- 
+
 .gallery-empty {
   color: var(--text-secondary);
   font-size: 1.4rem;
   text-align: center;
 }
- 
+
 .gallery-back-btn {
   position: absolute;
   top: 0.8rem;
@@ -254,7 +269,7 @@ body {
   transform: scale(0.96);
   filter: brightness(0.85);
 }
- 
+
 .gallery-indicator {
   position: absolute;
   bottom: 1rem;
@@ -268,7 +283,7 @@ body {
   font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
- 
+
 .gallery-nav-btn {
   position: absolute;
   top: 50%;
@@ -289,7 +304,7 @@ body {
 .gallery-nav-btn.pressed { transform: translateY(-50%) scale(0.92); filter: brightness(0.85); }
 .gallery-prev { left: 0.6rem; }
 .gallery-next { right: 0.6rem; }
- 
+
 /* ── Overlays ──────────────────────────────────────────────────────────── */
 #overlay-connecting {
   position: fixed;
@@ -304,7 +319,7 @@ body {
   font-size: 1.5rem;
   color: #fff;
 }
- 
+
 #overlay-connecting::after {
   content: '';
   width: 14px;
@@ -313,12 +328,12 @@ body {
   background: #fff;
   animation: pulse 1.2s ease-in-out infinite;
 }
- 
+
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1);   }
   50%       { opacity: 0.3; transform: scale(0.7); }
 }
- 
+
 #overlay-error {
   position: fixed;
   inset: 0;
@@ -333,7 +348,7 @@ body {
   text-align: center;
   white-space: pre-wrap;
 }
- 
+
 /* ── Size variant: small TV ────────────────────────────────────────────── */
 [data-size="small"] {
   --font-heading:    3.2rem;
@@ -341,9 +356,10 @@ body {
   --font-event-time: 1.7rem;
   --font-cat-btn:    1.0rem;
 }
- 
+
 [data-size="small"] .cat-btn { min-width: 100px; }
-[data-size="small"] .cat-btn-img { height: 70px; }
+[data-size="small"] .cat-btn-img,
+[data-size="small"] .cat-btn-img-wrap { height: 70px; }
 [data-size="small"] .event-logo img { width: 130px; height: 75px; }
 [data-size="small"] .direction-icon { width: 42px; height: 42px; }
 [data-size="small"] .gallery-nav-btn { width: 75px; height: 75px; font-size: 2.8rem; }
