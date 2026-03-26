@@ -28,10 +28,7 @@ export function initGallery(container, images, categoryKey, onExit) {
   highlightCategoryButton(categoryKey);
 
   if (_images.length === 0) {
-    const msg = document.createElement("p");
-    msg.className   = "gallery-empty";
-    msg.textContent = "No images available.";
-    _container.appendChild(msg);
+    _renderEmpty();
     startTimer(_exit, INACTIVITY_MS);
     return;
   }
@@ -52,7 +49,21 @@ export function switchGalleryCategory(images, categoryKey) {
   _index  = 0;
   highlightCategoryButton(categoryKey);
 
-  if (_imgEl) {
+  if (_images.length === 0) {
+    // Switching to an empty category — clear whatever is shown and show empty state
+    clearEl(_container);
+    _imgEl = null;
+    _container.removeEventListener("touchstart", _onTouchStart);
+    _container.removeEventListener("touchend",   _onTouchEnd);
+    _renderEmpty();
+  } else if (!_imgEl) {
+    // Coming from an empty category — build the full layout for the first time
+    clearEl(_container);
+    _buildLayout();
+    _container.addEventListener("touchstart", _onTouchStart, { passive: true });
+    _container.addEventListener("touchend",   _onTouchEnd,   { passive: true });
+    _renderImage(0, null);
+  } else {
     _renderImage(0, null);
   }
 
@@ -71,6 +82,23 @@ export function destroyGallery() {
 }
 
 // ── Internal ────────────────────────────────────────────────────────────────
+
+function _renderEmpty() {
+  const backBtn = document.createElement("button");
+  backBtn.className   = "gallery-back-btn";
+  backBtn.textContent = "← Back";
+  backBtn.addEventListener("click", () => {
+    showFeedback(backBtn);
+    _exit();
+  });
+
+  const msg = document.createElement("p");
+  msg.className   = "gallery-empty";
+  msg.textContent = "No images available.";
+
+  _container.appendChild(backBtn);
+  _container.appendChild(msg);
+}
 
 function _buildLayout() {
   // Back button

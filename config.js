@@ -40,6 +40,9 @@ const FADE_TRANSITION_MS = 500;
 // State re-evaluation interval (ms) — checks time windows even without Firebase update
 const STATE_RECHECK_INTERVAL_MS = 60_000;
 
+// Interval between category button image changes when multiple images are uploaded (ms)
+const BUTTON_IMAGE_CYCLE_MS = 30_000;
+
 // Placeholder logo shown when company logo URL is missing or fails to load
 const PLACEHOLDER_LOGO_SRC = "assets/icons/placeholder-logo.svg";
 
