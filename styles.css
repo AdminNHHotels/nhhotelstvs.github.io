@@ -172,13 +172,10 @@ body {
 
 .event-room {
   padding: 0.8em 1em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
   vertical-align: middle;
 }
 .event-room-name { font-size: var(--font-event-room); font-weight: 700; }
-.event-note      { font-size: 0.8em; color: var(--text-secondary); }
+.event-note      { font-size: 0.8em; color: var(--text-secondary); margin-top: 0.2em; }
 
 .event-time {
   padding: 0.8em 1em;
