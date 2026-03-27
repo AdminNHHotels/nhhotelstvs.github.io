@@ -67,6 +67,13 @@ function _showSlide(index) {
   // Image source: button_image_url first, fallback to first gallery image
   const src = cat.button_image_url || (cat.gallery_images && cat.gallery_images[0]) || "";
 
+  // Blurred background (fills empty space in tall aspect ratios)
+  const bgImg = document.createElement("img");
+  bgImg.className        = "carousel-bg";
+  bgImg.src              = src;
+  bgImg.alt              = "";
+  bgImg.setAttribute("aria-hidden", "true");
+
   const newImg = document.createElement("img");
   newImg.className = "carousel-image";
   newImg.alt       = cat.label || key;
@@ -79,6 +86,7 @@ function _showSlide(index) {
 
   const slide = document.createElement("div");
   slide.className = "carousel-slide";
+  slide.appendChild(bgImg);
   slide.appendChild(newImg);
   slide.appendChild(label);
 
