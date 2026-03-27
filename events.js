@@ -95,7 +95,7 @@ function _buildTable(reservations) {
     // Time
     const timeTd = tr.insertCell();
     timeTd.className = "event-time";
-    timeTd.textContent = `${r.time_start || ""}–${r.time_end || ""}`;
+    timeTd.textContent = `${r.time_start || ""} – ${r.time_end || ""}`;
 
     // Direction
     const dirTd = tr.insertCell();

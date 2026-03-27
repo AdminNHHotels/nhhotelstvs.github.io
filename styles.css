@@ -21,6 +21,7 @@
   --font-event-time:    1.4rem;
   --font-cat-btn:       1.08rem;
   --font-cinzel:        'Cinzel', Georgia, serif;
+  --font-montserrat:    'Montserrat', 'Segoe UI', Arial, sans-serif;
   --font-roboto:        'Roboto', 'Segoe UI', Arial, sans-serif;
   --font-comfortaa:     'Comfortaa', 'Segoe UI', Arial, sans-serif;
   --font-body:          'Inter', 'Segoe UI', Arial, sans-serif;
@@ -83,6 +84,8 @@ body {
   gap: 0.75rem;
   padding: 1rem 1rem;
   background: var(--bg-card);
+  border-left: 8px solid var(--frame-color);
+  border-right: 8px solid var(--frame-color);
   border-bottom: 2px solid var(--frame-color);
   overflow-x: auto;
   scrollbar-width: none;
@@ -186,9 +189,9 @@ body {
 .events-table th {
   background: #ffffff;
   color: var(--frame-color);
-  font-family: var(--font-cinzel);
+  font-family: var(--font-montserrat);
   font-size: 0.85em;
-  font-weight: 700;
+  font-weight: 500;
   text-align: center;
   padding: 0.6em 1em;
   border-bottom: 2px solid var(--frame-color);
@@ -199,6 +202,7 @@ body {
 .events-table th:last-child { border-right: none; }
 
 .event-row { border-bottom: 1px solid var(--event-row-border); }
+.event-row:last-child { border-bottom: none; }
 .event-row:nth-child(even) { background: var(--accent-light); }
 
 .event-logo {
@@ -216,7 +220,7 @@ body {
   vertical-align: middle;
   border-right: 1px solid var(--event-col-divider);
 }
-.event-room-name { display: block; font-family: var(--font-roboto); font-size: var(--font-event-room); font-weight: 700; }
+.event-room-name { display: block; font-family: var(--font-comfortaa); font-size: var(--font-event-room); font-weight: 700; }
 .event-note      { display: block; font-family: var(--font-comfortaa); font-size: 0.8em; color: var(--text-secondary); margin-top: 0.2em; }
 
 .event-time {
