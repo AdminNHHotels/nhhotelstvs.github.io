@@ -181,7 +181,7 @@ body {
 /* ── EVENTS state ──────────────────────────────────────────────────────── */
 .events-table {
   width: 100%;
-  height: auto;
+  height: 100%;
   border-collapse: collapse;
   font-size: var(--font-event-room);
 }
