@@ -39,7 +39,7 @@ import { showError, showFeedback } from "./ui.js";
 
   // 5. Init state machine
   const mainContent = document.getElementById("main-content");
-  initState(mainContent, deviceConfig, categories);
+  initState(mainContent, deviceConfig, categories, deviceId);
 
   // 6. Subscribe to today's reservations (live)
   let latestReservations = {};

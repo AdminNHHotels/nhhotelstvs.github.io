@@ -3,14 +3,17 @@
 import { buildLogoImg, buildDirectionCell, clearEl } from "./ui.js";
 
 let _container = null;
+let _deviceId  = null;
 
 /**
  * Initialise the EVENTS view inside the given container element.
  * @param {HTMLElement} container — #main-content
  * @param {Object} reservations — raw Firebase reservations object for today
+ * @param {string} deviceId — e.g. "tv1", "tv2", "tv3"
  */
-export function initEvents(container, reservations) {
+export function initEvents(container, reservations, deviceId) {
   _container = container;
+  _deviceId  = deviceId;
   clearEl(_container);
 
   const table = _buildTable(reservations);
@@ -20,10 +23,12 @@ export function initEvents(container, reservations) {
 /**
  * Update the events table with fresh data (called on live Firebase update).
  * @param {Object} reservations — raw Firebase reservations object
+ * @param {string} [deviceId] — optional; defaults to the value set at init
  * @returns {boolean} — true if at least one active reservation is visible
  */
-export function updateEvents(reservations) {
+export function updateEvents(reservations, deviceId) {
   if (!_container) return false;
+  if (deviceId) _deviceId = deviceId;
   const active = _getActiveReservations(reservations);
   clearEl(_container);
   _container.appendChild(_buildTable(reservations));
@@ -33,6 +38,7 @@ export function updateEvents(reservations) {
 /** Tear down — nothing persistent to clean up. */
 export function destroyEvents() {
   _container = null;
+  _deviceId  = null;
 }
 
 // ── Internal helpers ───────────────────────────────────────────────────────
@@ -97,10 +103,11 @@ function _buildTable(reservations) {
     timeTd.className = "event-time";
     timeTd.textContent = `${r.time_start || ""} – ${r.time_end || ""}`;
 
-    // Direction
+    // Direction — per-TV key (direction_tv1 / direction_tv2 / direction_tv3)
+    const directionKey = _deviceId ? `direction_${_deviceId}` : "direction_tv1";
     const dirTd = tr.insertCell();
     dirTd.className = "event-direction";
-    dirTd.appendChild(buildDirectionCell(r.direction || "straight"));
+    dirTd.appendChild(buildDirectionCell(r[directionKey] || "north"));
   });
 
   return table;

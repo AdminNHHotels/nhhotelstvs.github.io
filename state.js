@@ -15,6 +15,7 @@ let _previous     = null;   // state before GALLERY_MANUAL
 let _container    = null;   // #main-content element
 let _categories   = {};     // full categories map
 let _deviceConfig = {};     // device config from Firebase
+let _deviceId     = null;   // "tv1" | "tv2" | "tv3"
 let _reservations = {};     // latest raw reservations snapshot
 
 /**
@@ -22,11 +23,13 @@ let _reservations = {};     // latest raw reservations snapshot
  * @param {HTMLElement} container
  * @param {Object} deviceConfig
  * @param {Object} categories
+ * @param {string} deviceId — "tv1" | "tv2" | "tv3"
  */
-export function initState(container, deviceConfig, categories) {
+export function initState(container, deviceConfig, categories, deviceId) {
   _container    = container;
   _deviceConfig = deviceConfig;
   _categories   = categories;
+  _deviceId     = deviceId;
 }
 
 /** Update the reservations snapshot (from Firebase live subscription). */
@@ -89,7 +92,7 @@ function _setup(state, categoryKey) {
 
   switch (state) {
     case STATE.EVENTS:
-      initEvents(_container, _reservations);
+      initEvents(_container, _reservations, _deviceId);
       break;
 
     case STATE.DEFAULT_CAROUSEL:
