@@ -4,6 +4,7 @@ import { buildLogoImg, buildDirectionCell, clearEl } from "./ui.js";
 
 let _container = null;
 let _deviceId  = null;
+let _wrap      = null; // scroll wrapper element
 
 /**
  * Initialise the EVENTS view inside the given container element.
@@ -16,8 +17,15 @@ export function initEvents(container, reservations, deviceId) {
   _deviceId  = deviceId;
   clearEl(_container);
 
+  _wrap = document.createElement("div");
+  _wrap.className = "events-scroll-wrap";
+
   const table = _buildTable(reservations);
-  _container.appendChild(table);
+  _wrap.appendChild(table);
+  _container.appendChild(_wrap);
+
+  // Measure overflow after layout and activate scroll animation if needed
+  requestAnimationFrame(() => _activateScrollIfNeeded(_wrap, table));
 }
 
 /**
@@ -30,8 +38,18 @@ export function updateEvents(reservations, deviceId) {
   if (!_container) return false;
   if (deviceId) _deviceId = deviceId;
   const active = _getActiveReservations(reservations);
-  clearEl(_container);
-  _container.appendChild(_buildTable(reservations));
+
+  // Rebuild inside the existing scroll wrapper (or the container if wrap is gone)
+  const host = _wrap || _container;
+  clearEl(host);
+  const table = _buildTable(reservations);
+  host.appendChild(table);
+
+  if (_wrap) {
+    _wrap.classList.remove("is-scrolling");
+    requestAnimationFrame(() => _activateScrollIfNeeded(_wrap, table));
+  }
+
   return active.length > 0;
 }
 
@@ -39,6 +57,7 @@ export function updateEvents(reservations, deviceId) {
 export function destroyEvents() {
   _container = null;
   _deviceId  = null;
+  _wrap      = null;
 }
 
 // ── Internal helpers ───────────────────────────────────────────────────────
@@ -111,6 +130,22 @@ function _buildTable(reservations) {
   });
 
   return table;
+}
+
+/**
+ * If the table is taller than its clipping wrapper, set CSS custom properties
+ * and add the .is-scrolling class to start the scroll animation.
+ * Duration scales with the overflow amount so the scroll speed stays consistent.
+ */
+function _activateScrollIfNeeded(wrap, table) {
+  const overflow = table.offsetHeight - wrap.offsetHeight;
+  if (overflow <= 0) return;
+
+  // ~4 s per 100 px of overflow, minimum 12 s
+  const duration = Math.max(12, Math.round(overflow / 100) * 4);
+  wrap.style.setProperty("--scroll-offset", `-${overflow}px`);
+  wrap.style.setProperty("--scroll-duration", `${duration}s`);
+  wrap.classList.add("is-scrolling");
 }
 
 function _nowMinutes() {
