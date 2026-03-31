@@ -71,6 +71,12 @@ export function evaluateState() {
     return;
   }
 
+  if (target === STATE.EVENTS && _current === STATE.EVENTS) {
+    // Already in EVENTS — re-render the table with updated data (no full teardown/setup)
+    updateEvents(_reservations, _deviceId);
+    return;
+  }
+
   transitionTo(target);
 }
 
