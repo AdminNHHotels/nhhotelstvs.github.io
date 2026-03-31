@@ -64,12 +64,14 @@ export function destroyEvents() {
 
 function _getActiveReservations(reservations) {
   const now = _nowMinutes();
-  return Object.values(reservations || {}).filter((r) => {
-    if (!r.active) return false;
-    const from = _parseTime(r.show_from);
-    const end  = _parseTime(r.time_end);
-    return from <= now && now <= end;
-  });
+  return Object.values(reservations || {})
+    .filter((r) => {
+      if (!r.active) return false;
+      const from = _parseTime(r.show_from);
+      const end  = _parseTime(r.time_end);
+      return from <= now && now <= end;
+    })
+    .sort((a, b) => _parseTime(a.time_start) - _parseTime(b.time_start));
 }
 
 function _buildTable(reservations) {
