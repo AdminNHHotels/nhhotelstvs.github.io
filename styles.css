@@ -19,9 +19,9 @@
   --overlay-bg:         rgba(0,0,0,0.75);
 
   --font-heading:       2.6rem;
-  --font-event-room:    2.2rem;
-  --font-event-time:    1.9rem;
-  --font-cat-btn:       1.35rem;
+  --font-event-room:    1.75rem;
+  --font-event-time:    1.5rem;
+  --font-cat-btn:       1rem;
   --font-gotham:        'Gotham Book', 'Gotham', 'Montserrat', 'Segoe UI', Arial, sans-serif;
   --font-montserrat:    'Montserrat', 'Segoe UI', Arial, sans-serif;
   --font-roboto:        'Roboto', 'Segoe UI', Arial, sans-serif;
@@ -93,7 +93,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  padding: 1.25rem 1.25rem;
+  padding: 0.75rem 1rem;
   background: var(--bg-card);
   border-left: 6px solid var(--frame-color);
   border-right: 6px solid var(--frame-color);
@@ -108,7 +108,7 @@ body {
   min-width: 90px;
   max-width: 220px;
   position: relative;
-  height: 160px;
+  height: 115px;
   overflow: hidden;
   background: var(--cat-btn-bg);
   border: 1px solid rgba(var(--frame-color-rgb), 0.2);
@@ -161,10 +161,9 @@ body {
   font-size: var(--font-cat-btn);
   font-weight: 700;
   text-align: center;
-  padding: 0.5em 0.5em 0.4em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 0.4em 0.4em 0.35em;
+  white-space: normal;
+  line-height: 1.2;
   background: rgba(255, 255, 255, 0.72);
   color: #111;
   letter-spacing: 0.03em;
@@ -232,7 +231,7 @@ body {
   font-size: 0.85em;
   font-weight: 500;
   text-align: center;
-  padding: 0.6em 1em;
+  padding: 0.5em 0.8em;
   border-bottom: 2px solid var(--frame-color);
   border-right: 1px solid var(--event-col-divider);
   text-transform: uppercase;
@@ -245,16 +244,16 @@ body {
 .event-row:nth-child(even) { background: var(--accent-light); }
 
 .event-logo {
-  padding: 1.4em 1em;
-  width: 180px;
+  padding: 1.1em 0.8em;
+  width: 144px;
   text-align: center;
   vertical-align: middle;
   border-right: 1px solid var(--event-col-divider);
 }
-.event-logo img { width: 150px; height: 85px; object-fit: contain; }
+.event-logo img { width: 120px; height: 68px; object-fit: contain; }
 
 .event-room {
-  padding: 1.4em 1em;
+  padding: 1.1em 0.8em;
   text-align: center;
   vertical-align: middle;
   border-right: 1px solid var(--event-col-divider);
@@ -263,7 +262,7 @@ body {
 .event-note      { display: block; font-family: var(--font-comfortaa); font-size: 0.8em; color: var(--text-secondary); margin-top: 0.2em; }
 
 .event-time {
-  padding: 1.4em 1em;
+  padding: 1.1em 0.8em;
   font-family: var(--font-comfortaa);
   font-size: var(--font-event-time);
   white-space: nowrap;
@@ -273,9 +272,9 @@ body {
   border-right: 1px solid var(--event-col-divider);
 }
 
-.event-direction { padding: 1.4em 1em; text-align: center; vertical-align: middle; }
+.event-direction { padding: 1.1em 0.8em; text-align: center; vertical-align: middle; }
 .direction-cell  { display: flex; flex-direction: column; align-items: center; gap: 0.3em; }
-.direction-icon  { width: 48px; height: 48px; filter: var(--direction-icon-filter); }
+.direction-icon  { width: 38px; height: 38px; filter: var(--direction-icon-filter); }
 .direction-label { font-family: var(--font-comfortaa); font-size: var(--font-event-time); white-space: nowrap; }
 
 .events-empty {
