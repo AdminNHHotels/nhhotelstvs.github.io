@@ -36,10 +36,11 @@
   --transition-press:   120ms ease;
 }
 
+
 /* ── Gotham Book (self-hosted in assets/) ──────────────────────────────── */
 @font-face {
   font-family: 'Gotham Book';
-  src: url('../assets/Gotham Book.ttf') format('truetype');
+  src: url('assets/Gotham Book.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -133,6 +134,7 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  border-radius: inherit;
 }
 
 .cat-btn-img-wrap .cat-btn-img {

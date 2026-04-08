@@ -166,6 +166,7 @@ export function onCategoryTap(categoryKey) {
     const cat    = _categories[categoryKey] || {};
     const images = cat.gallery_images || [];
     switchGalleryCategory(images, categoryKey);
+    _savedCarouselKey = categoryKey; // keep resume point in sync with the category now being viewed
   } else {
     transitionTo(STATE.GALLERY_MANUAL, categoryKey);
   }

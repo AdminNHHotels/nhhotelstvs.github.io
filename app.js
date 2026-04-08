@@ -196,6 +196,20 @@ function _renderCategoryButtons(deviceConfig, categories) {
 
     nav.appendChild(btn);
   });
+
+  // Shrink any label that overflows its button after layout is available
+  requestAnimationFrame(() => {
+    nav.querySelectorAll(".cat-btn-label").forEach(_fitLabelText);
+  });
+}
+
+/** Scale down a button label's font-size until the text fits on one line. */
+function _fitLabelText(label) {
+  label.style.fontSize = "";                          // reset to CSS value
+  if (label.scrollWidth <= label.offsetWidth) return; // already fits
+  const ratio    = label.offsetWidth / label.scrollWidth;
+  const computed = parseFloat(getComputedStyle(label).fontSize);
+  label.style.fontSize = Math.max(computed * ratio, 8) + "px";
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
