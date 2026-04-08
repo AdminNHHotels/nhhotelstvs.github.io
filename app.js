@@ -205,10 +205,20 @@ function _renderCategoryButtons(deviceConfig, categories) {
 
 /** Scale down a button label's font-size until the text fits on one line. */
 function _fitLabelText(label) {
-  label.style.fontSize = "";          // reset to CSS value
-  label.style.overflow = "visible";   // lift clip so scrollWidth reflects true text width
-  const textWidth = label.scrollWidth;
-  label.style.overflow = "";          // restore
+  label.style.fontSize = "";  // reset to CSS value
+
+  // Clone off-screen with no width constraint to measure true text width
+  const ghost = label.cloneNode(true);
+  ghost.style.position   = "fixed";
+  ghost.style.top        = "-9999px";
+  ghost.style.left       = "-9999px";
+  ghost.style.right      = "auto";
+  ghost.style.width      = "auto";
+  ghost.style.visibility = "hidden";
+  document.body.appendChild(ghost);
+  const textWidth = ghost.offsetWidth;
+  document.body.removeChild(ghost);
+
   const available = label.offsetWidth;
   if (textWidth <= available) return;
   const computed = parseFloat(getComputedStyle(label).fontSize);
