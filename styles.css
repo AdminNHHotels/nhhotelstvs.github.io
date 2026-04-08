@@ -149,7 +149,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2.25rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,7 +162,6 @@ body {
   font-size: clamp(0.6rem, 11cqw, 1rem);
   font-weight: 700;
   white-space: nowrap;
-  overflow: hidden;
   color: #111;
   letter-spacing: 0.03em;
   padding: 0 0.4em;
