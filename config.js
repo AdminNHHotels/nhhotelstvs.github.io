@@ -14,9 +14,15 @@ const FIREBASE_CONFIG = {
 // Inactivity timeout before gallery auto-exits (ms)
 const INACTIVITY_MS = 20_000;
 
-// Default carousel interval — time each category is shown (ms)
-// Overridden per-device from Firebase /devices/{id}/carousel_interval_ms
-const CAROUSEL_MS = 60_000;
+// Carousel: duration each individual slide is shown (ms)
+const CAROUSEL_SLIDE_MS = 10_000;
+
+// Carousel: max gallery images shown per category (after the preview)
+const CAROUSEL_MAX_CONTENT = 5;
+
+// Carousel: max slides auto-advanced after user inactivity resume before switching category
+// (4 slides × 10s = 40s maximum post-resume budget per category)
+const CAROUSEL_RESUME_BUDGET = 4;
 
 // How long before event start should the reservation be shown (hours)
 // Overridden per-device from Firebase /devices/{id}/show_before_hours

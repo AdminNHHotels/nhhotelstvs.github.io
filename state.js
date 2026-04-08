@@ -10,13 +10,14 @@ export const STATE = {
   GALLERY_MANUAL:   "GALLERY_MANUAL",
 };
 
-let _current      = null;   // current state name
-let _previous     = null;   // state before GALLERY_MANUAL
-let _container    = null;   // #main-content element
-let _categories   = {};     // full categories map
-let _deviceConfig = {};     // device config from Firebase
-let _deviceId     = null;   // "tv1" | "tv2" | "tv3"
-let _reservations = {};     // latest raw reservations snapshot
+let _current           = null;   // current state name
+let _previous          = null;   // state before GALLERY_MANUAL
+let _container         = null;   // #main-content element
+let _categories        = {};     // full categories map
+let _deviceConfig      = {};     // device config from Firebase
+let _deviceId          = null;   // "tv1" | "tv2" | "tv3"
+let _reservations      = {};     // latest raw reservations snapshot
+let _savedCarouselKey  = null;   // category key to resume when returning to carousel
 
 /**
  * Boot the state machine.
@@ -49,6 +50,10 @@ export function setCategories(categories) {
  */
 export function transitionTo(newState, categoryKey = null) {
   if (newState === _current && newState !== STATE.GALLERY_MANUAL) return; // no-op
+
+  if (_current === STATE.DEFAULT_CAROUSEL) {
+    _savedCarouselKey = getCurrentCategoryKey();
+  }
 
   _teardown(_current);
 
@@ -93,8 +98,7 @@ export function currentState() {
 // ── Private ────────────────────────────────────────────────────────────────
 
 function _setup(state, categoryKey) {
-  const order      = _deviceConfig.categories_order || [];
-  const intervalMs = _deviceConfig.carousel_interval_ms || CAROUSEL_MS;
+  const order = _deviceConfig.categories_order || [];
 
   switch (state) {
     case STATE.EVENTS:
@@ -102,7 +106,8 @@ function _setup(state, categoryKey) {
       break;
 
     case STATE.DEFAULT_CAROUSEL:
-      initCarousel(_container, _categories, order, intervalMs);
+      initCarousel(_container, _categories, order, _savedCarouselKey);
+      _savedCarouselKey = null;
       break;
 
     case STATE.GALLERY_MANUAL: {

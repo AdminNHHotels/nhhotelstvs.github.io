@@ -323,6 +323,47 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
 }
 
+.carousel-indicator {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 10;
+  background: rgba(var(--frame-color-rgb), 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 0.3em 1.2em;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-family: var(--font-comfortaa);
+  font-size: 1.45rem;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(var(--frame-color-rgb), 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  font-size: 3.0rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-press);
+}
+.carousel-nav-btn.pressed { transform: translateY(-50%) scale(0.92); filter: brightness(0.85); }
+.carousel-prev { left: 0.6rem; }
+.carousel-next { right: 0.6rem; }
+
 /* ── GALLERY_MANUAL state ──────────────────────────────────────────────── */
 .gallery-image-wrap {
   position: relative;
