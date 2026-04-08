@@ -85,8 +85,28 @@ function _applyTheme(config) {
   const body = document.body;
   body.dataset.size = config.size || "big";
 
-  const color = config.heading_color || "#0033A0";
+  const color = config.heading_color || "#003A70";
+  const rgb = _hexToRgb(color);
   document.documentElement.style.setProperty("--heading-color", color);
+  document.documentElement.style.setProperty("--frame-color", color);
+  if (rgb) {
+    document.documentElement.style.setProperty("--frame-color-rgb", `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+  }
+  document.documentElement.style.setProperty("--direction-icon-filter", _colorToSvgFilter(color));
+}
+
+function _hexToRgb(hex) {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return m ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) } : null;
+}
+
+// Precomputed CSS filter strings to recolor black SVG arrows to brand colors.
+const _SVG_FILTERS = {
+  '#003a70': 'invert(18%) sepia(99%) saturate(780%) hue-rotate(198deg) brightness(88%) contrast(100%)',
+  '#9d2235': 'invert(23%) sepia(79%) saturate(706%) hue-rotate(316deg) brightness(89%) contrast(100%)',
+};
+function _colorToSvgFilter(hex) {
+  return _SVG_FILTERS[hex.toLowerCase()] || _SVG_FILTERS['#003a70'];
 }
 
 // ── Category buttons ────────────────────────────────────────────────────────

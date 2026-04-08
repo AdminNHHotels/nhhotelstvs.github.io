@@ -2,7 +2,7 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────────────────── */
 :root {
-  --heading-color:      #0033A0;   /* overridden at runtime from device config */
+  --heading-color:      #003A70;   /* overridden at runtime from device config */
   --bg-dark:            #ffffff;
   --bg-card:            #f5f5f5;
   --text-primary:       #1a1a1a;
@@ -11,8 +11,10 @@
   --cat-btn-active-bg:  #e0e0e0;
   --cat-btn-border:     #cccccc;
   --event-row-border:   #e8e8e8;
-  --event-col-divider:  rgba(30, 77, 75, 0.18);
-  --accent-light:       rgba(30, 77, 75, 0.05);
+  --event-col-divider:  rgba(var(--frame-color-rgb), 0.18);
+  --accent-light:       rgba(var(--frame-color-rgb), 0.05);
+  --accent-mid:         #0076A8;
+  --accent-lighter:     #8DB9CA;
   --shadow-card:        0 2px 10px rgba(0, 0, 0, 0.07);
   --overlay-bg:         rgba(0,0,0,0.75);
 
@@ -20,12 +22,14 @@
   --font-event-room:    2.2rem;
   --font-event-time:    1.9rem;
   --font-cat-btn:       1.35rem;
-  --font-cinzel:        'Cinzel', Georgia, serif;
+  --font-gotham:        'Gotham Book', 'Gotham', 'Montserrat', 'Segoe UI', Arial, sans-serif;
   --font-montserrat:    'Montserrat', 'Segoe UI', Arial, sans-serif;
   --font-roboto:        'Roboto', 'Segoe UI', Arial, sans-serif;
   --font-comfortaa:     'Comfortaa', 'Segoe UI', Arial, sans-serif;
   --font-body:          'Inter', 'Segoe UI', Arial, sans-serif;
-  --frame-color:        #1e4d4b;
+  --frame-color:        #003A70;
+  --frame-color-rgb:    0, 58, 112;
+  --direction-icon-filter: invert(18%) sepia(99%) saturate(780%) hue-rotate(198deg) brightness(88%) contrast(100%);
 
   --transition-slide:   300ms ease;
   --transition-fade:    500ms ease;
@@ -98,7 +102,7 @@ body {
   height: 160px;
   overflow: hidden;
   background: var(--cat-btn-bg);
-  border: 1px solid rgba(30, 77, 75, 0.2);
+  border: 1px solid rgba(var(--frame-color-rgb), 0.2);
   border-radius: 16px;
   color: var(--text-primary);
   font-size: var(--font-cat-btn);
@@ -144,7 +148,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  font-family: var(--font-cinzel);
+  font-family: var(--font-gotham);
   font-size: var(--font-cat-btn);
   font-weight: 700;
   text-align: center;
@@ -215,7 +219,7 @@ body {
 .events-table th {
   background: #ffffff;
   color: var(--frame-color);
-  font-family: var(--font-montserrat);
+  font-family: var(--font-gotham);
   font-size: 0.85em;
   font-weight: 500;
   text-align: center;
@@ -262,7 +266,7 @@ body {
 
 .event-direction { padding: 1.4em 1em; text-align: center; vertical-align: middle; }
 .direction-cell  { display: flex; flex-direction: column; align-items: center; gap: 0.3em; }
-.direction-icon  { width: 48px; height: 48px; filter: invert(27%) sepia(40%) saturate(600%) hue-rotate(134deg) brightness(80%) contrast(90%); }
+.direction-icon  { width: 48px; height: 48px; filter: var(--direction-icon-filter); }
 .direction-label { font-family: var(--font-comfortaa); font-size: var(--font-event-time); white-space: nowrap; }
 
 .events-empty {
@@ -307,13 +311,13 @@ body {
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(30, 77, 75, 0.7);
+  background: rgba(var(--frame-color-rgb), 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #fff;
   padding: 0.4em 1.6em;
   border-radius: 20px;
-  font-family: var(--font-cinzel);
+  font-family: var(--font-gotham);
   font-size: 1.7rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -350,13 +354,13 @@ body {
   top: 0.8rem;
   left: 0.8rem;
   z-index: 10;
-  background: rgba(30, 77, 75, 0.65);
+  background: rgba(var(--frame-color-rgb), 0.65);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #fff;
   border: 1px solid rgba(255,255,255,0.25);
   border-radius: 20px;
-  font-family: var(--font-cinzel);
+  font-family: var(--font-gotham);
   font-size: 1.3rem;
   padding: 0.5em 1.5em;
   font-weight: 600;
@@ -373,7 +377,7 @@ body {
   bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(30, 77, 75, 0.65);
+  background: rgba(var(--frame-color-rgb), 0.65);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #fff;
@@ -391,7 +395,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(30, 77, 75, 0.55);
+  background: rgba(var(--frame-color-rgb), 0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #fff;
