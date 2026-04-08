@@ -185,8 +185,11 @@ function _renderCategoryButtons(deviceConfig, categories) {
 
     // Label always visible — overlaid at bottom when image present, centered when not
     const labelSpan = document.createElement("span");
-    labelSpan.className   = "cat-btn-label";
-    labelSpan.textContent = cat.label || key;
+    labelSpan.className = "cat-btn-label";
+    const labelText = document.createElement("span");
+    labelText.className   = "cat-btn-label-text";
+    labelText.textContent = cat.label || key;
+    labelSpan.appendChild(labelText);
     btn.appendChild(labelSpan);
 
     btn.addEventListener("click", () => {
@@ -205,10 +208,11 @@ function _renderCategoryButtons(deviceConfig, categories) {
 
 /** Scale down a button label's font-size until the text fits on one line. */
 function _fitLabelText(label) {
-  label.style.fontSize = "";  // reset to CSS value
+  const textEl = label.querySelector(".cat-btn-label-text") || label;
+  textEl.style.fontSize = "";  // reset to CSS value
 
   // Clone off-screen with no width constraint to measure true text width
-  const ghost = label.cloneNode(true);
+  const ghost = textEl.cloneNode(true);
   ghost.style.position   = "fixed";
   ghost.style.top        = "-9999px";
   ghost.style.left       = "-9999px";
@@ -221,8 +225,8 @@ function _fitLabelText(label) {
 
   const available = label.offsetWidth;
   if (textWidth <= available) return;
-  const computed = parseFloat(getComputedStyle(label).fontSize);
-  label.style.fontSize = Math.max(computed * (available / textWidth), 8) + "px";
+  const computed = parseFloat(getComputedStyle(textEl).fontSize);
+  textEl.style.fontSize = Math.max(computed * (available / textWidth), 8) + "px";
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────

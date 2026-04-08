@@ -38,11 +38,27 @@ export function initCarousel(container, categories, order, startCategoryKey = nu
   clearEl(_container);
   if (_order.length === 0) return;
 
-  _buildCategorySlides();
+  // When resuming mid-category from gallery, extend the cap just enough to cover the start
+  // position plus the resume budget (e.g. slide 13 + budget 4 → maxContent 16 → 4 slides play).
+  const firstCatMax = startSlideIndex > 0
+    ? startSlideIndex + CAROUSEL_RESUME_BUDGET - 1
+    : CAROUSEL_MAX_CONTENT;
+  _buildCategorySlides(firstCatMax);
 
-  // Apply start slide, advancing to next category if it overflows this one
+  console.log('[carousel] initCarousel resume debug:',
+    'startSlideIndex=', startSlideIndex,
+    'CAROUSEL_RESUME_BUDGET=', CAROUSEL_RESUME_BUDGET,
+    'firstCatMax=', firstCatMax,
+    '_slides.length=', _slides.length,
+    'startCategoryKey=', startCategoryKey,
+    '_catIndex=', _catIndex,
+    '_order[_catIndex]=', _order[_catIndex]
+  );
+
+  // Apply start slide; if it still overflows (empty category), advance to next
   _slideIndex = startSlideIndex;
   if (_slideIndex >= _slides.length) {
+    console.warn('[carousel] OVERFLOW: slideIndex', _slideIndex, '>= slides.length', _slides.length, '— advancing to next category');
     _catIndex   = (_catIndex + 1) % _order.length;
     _slideIndex = 0;
     _buildCategorySlides();
@@ -85,14 +101,16 @@ export function getCurrentSlideIndex() {
 
 // ── Internal ────────────────────────────────────────────────────────────────
 
-/** Build _slides = [preview, ...gallery (up to CAROUSEL_MAX_CONTENT)] for current category. */
-function _buildCategorySlides() {
+/** Build _slides = [preview, ...gallery (up to maxContent)] for current category. */
+function _buildCategorySlides(maxContent = CAROUSEL_MAX_CONTENT) {
   const key     = _order[_catIndex];
   const cat     = _categories[key] || {};
   const preview = cat.button_image_url || (cat.gallery_images && cat.gallery_images[0]) || null;
-  const content = (cat.gallery_images || []).slice(0, CAROUSEL_MAX_CONTENT);
-  _slides = [preview, ...content].filter(Boolean);
-  if (_slides.length === 0) _slides = [null];
+  const content = (cat.gallery_images || []).slice(0, maxContent);
+  // Keep the preview slot even if null — slide 0 is always the preview,
+  // slide N+1 is always gallery[N]. This keeps the galleryIndex → carouselSlide
+  // mapping (galleryIndex + 2) consistent regardless of whether a preview exists.
+  _slides = [preview, ...content];
 }
 
 function _scheduleNext() {
@@ -114,7 +132,7 @@ function _advance() {
 function _showSlide() {
   const key       = _order[_catIndex];
   const cat       = _categories[key] || {};
-  const src       = _slides[_slideIndex];
+  const src       = _slides[_slideIndex] || "";
   const isPreview = (_slideIndex === 0);
 
   highlightCategoryButton(key);

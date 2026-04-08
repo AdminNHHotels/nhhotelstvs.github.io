@@ -149,24 +149,30 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.cat-btn-label-text {
   font-family: var(--font-gotham);
   font-size: clamp(0.6rem, 11cqw, 1rem);
   font-weight: 700;
-  text-align: center;
-  padding: 0.4em 0.4em 0.35em;
   white-space: nowrap;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.72);
   color: #111;
   letter-spacing: 0.03em;
+  padding: 0 0.4em;
+  max-width: 100%;
 }
 
 /* No-image variant: center label vertically */
 .cat-btn--no-image .cat-btn-label {
   top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
   background: transparent;
 }
 
