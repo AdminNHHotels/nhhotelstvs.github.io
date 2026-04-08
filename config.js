@@ -17,8 +17,12 @@ const INACTIVITY_MS = 20_000;
 // Carousel: duration each individual slide is shown (ms)
 const CAROUSEL_SLIDE_MS = 10_000;
 
-// Carousel: max gallery images shown per category (after the preview)
+// Carousel: max gallery images shown per category (after the preview) during normal auto-play
 const CAROUSEL_MAX_CONTENT = 5;
+
+// Carousel: how many slides auto-play after resuming from manual gallery inactivity
+// (e.g. 4 slides × 10s = 40s max additional auto-play before switching category)
+const CAROUSEL_RESUME_BUDGET = 4;
 
 
 // How long before event start should the reservation be shown (hours)

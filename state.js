@@ -154,11 +154,6 @@ function _onGalleryExit(galleryIndex = 0) {
     // "Following image" = gallery index + 1, mapped to carousel = galleryIndex + 1 + 1
     _savedCarouselSlide = galleryIndex + 2;
   }
-  console.log('[state] _onGalleryExit: galleryIndex=', galleryIndex,
-    '_previous=', _previous,
-    '_savedCarouselSlide=', _savedCarouselSlide,
-    '_savedCarouselKey=', _savedCarouselKey
-  );
   transitionTo(_previous || STATE.DEFAULT_CAROUSEL);
 }
 

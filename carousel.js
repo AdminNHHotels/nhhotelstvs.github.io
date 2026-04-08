@@ -45,20 +45,9 @@ export function initCarousel(container, categories, order, startCategoryKey = nu
     : CAROUSEL_MAX_CONTENT;
   _buildCategorySlides(firstCatMax);
 
-  console.log('[carousel] initCarousel resume debug:',
-    'startSlideIndex=', startSlideIndex,
-    'CAROUSEL_RESUME_BUDGET=', CAROUSEL_RESUME_BUDGET,
-    'firstCatMax=', firstCatMax,
-    '_slides.length=', _slides.length,
-    'startCategoryKey=', startCategoryKey,
-    '_catIndex=', _catIndex,
-    '_order[_catIndex]=', _order[_catIndex]
-  );
-
   // Apply start slide; if it still overflows (empty category), advance to next
   _slideIndex = startSlideIndex;
   if (_slideIndex >= _slides.length) {
-    console.warn('[carousel] OVERFLOW: slideIndex', _slideIndex, '>= slides.length', _slides.length, '— advancing to next category');
     _catIndex   = (_catIndex + 1) % _order.length;
     _slideIndex = 0;
     _buildCategorySlides();
