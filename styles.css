@@ -69,22 +69,11 @@ body[data-kiosk="true"] * { cursor: none !important; }
 /* ── Page layout ───────────────────────────────────────────────────────── */
 body {
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   grid-template-areas:
-    "heading"
     "nav"
     "main";
   height: 100vh;
-}
-
-/* ── Heading ───────────────────────────────────────────────────────────── */
-.page-heading {
-  grid-area: heading;
-  background: var(--frame-color);
-  height: 14px;
-  overflow: hidden;
-  padding: 0;
-  font-size: 0;
 }
 
 /* ── Category button bar ───────────────────────────────────────────────── */
@@ -110,6 +99,7 @@ body {
   position: relative;
   height: 115px;
   overflow: hidden;
+  container-type: inline-size;
   background: var(--cat-btn-bg);
   border: 1px solid rgba(var(--frame-color-rgb), 0.2);
   border-radius: 16px;
@@ -158,12 +148,12 @@ body {
   left: 0;
   right: 0;
   font-family: var(--font-gotham);
-  font-size: var(--font-cat-btn);
+  font-size: clamp(0.6rem, 11cqw, 1rem);
   font-weight: 700;
   text-align: center;
   padding: 0.4em 0.4em 0.35em;
-  white-space: normal;
-  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.72);
   color: #111;
   letter-spacing: 0.03em;

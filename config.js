@@ -12,7 +12,7 @@ const FIREBASE_CONFIG = {
 };
 
 // Inactivity timeout before gallery auto-exits (ms)
-const INACTIVITY_MS = 60_000;
+const INACTIVITY_MS = 20_000;
 
 // Default carousel interval — time each category is shown (ms)
 // Overridden per-device from Firebase /devices/{id}/carousel_interval_ms
