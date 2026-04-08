@@ -1,6 +1,6 @@
 // app.js — Bootstrap: reads ?device=, drives state machine
 
-import { initFirebase, loadDeviceConfig, loadCategories, subscribeToReservations, removeAllListeners }
+import { initFirebase, loadDeviceConfig, loadCategories, subscribeToCategories, subscribeToReservations, removeAllListeners }
   from "./firebase.js";
 import { initState, setReservations, setCategories, evaluateState, onCategoryTap, transitionTo, STATE }
   from "./state.js";
@@ -41,7 +41,14 @@ import { showError, showFeedback } from "./ui.js";
   const mainContent = document.getElementById("main-content");
   initState(mainContent, deviceConfig, categories, deviceId);
 
-  // 6. Subscribe to today's reservations (live)
+  // 6. Subscribe to live category updates (re-renders buttons on Drive/Firebase change)
+  subscribeToCategories((updatedCategories) => {
+    setCategories(updatedCategories);
+    _renderCategoryButtons(deviceConfig, updatedCategories);
+    evaluateState();
+  });
+
+  // 7. Subscribe to today's reservations (live)
   let latestReservations = {};
   _subscribeForDate(_todayString(), (reservations) => {
     latestReservations = reservations;
@@ -49,13 +56,13 @@ import { showError, showFeedback } from "./ui.js";
     evaluateState();
   });
 
-  // 7. Periodic re-evaluation (time windows change even without Firebase update)
+  // 8. Periodic re-evaluation (time windows change even without Firebase update)
   setInterval(() => {
     setReservations(latestReservations);
     evaluateState();
   }, STATE_RECHECK_INTERVAL_MS);
 
-  // 8. Midnight rollover
+  // 9. Midnight rollover
   _scheduleMidnightRollover(() => {
     removeAllListeners();
     latestReservations = {};
@@ -68,7 +75,7 @@ import { showError, showFeedback } from "./ui.js";
     evaluateState();
   });
 
-  // 9. Kiosk: suppress context menu
+  // 10. Kiosk: suppress context menu
   document.addEventListener("contextmenu", (e) => e.preventDefault());
 })();
 

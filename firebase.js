@@ -30,6 +30,17 @@ export async function loadCategories() {
   return snapshot.val();
 }
 
+/** Subscribe to live updates for /categories. Callback fires immediately with current data, then on every change. */
+export function subscribeToCategories(callback) {
+  const path = "categories";
+  _removeListener(path);
+  const dbRef = ref(_db, path);
+  const unsub = onValue(dbRef, (snapshot) => {
+    callback(snapshot.exists() ? snapshot.val() : {});
+  });
+  _activeListeners[path] = () => off(dbRef, "value", unsub);
+}
+
 /**
  * Subscribe to live updates for today's reservations.
  * @param {string} dateStr — "YYYY-MM-DD"
