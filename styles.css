@@ -323,23 +323,6 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
 }
 
-.carousel-indicator {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: 10;
-  background: rgba(var(--frame-color-rgb), 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  padding: 0.3em 1.2em;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
-  font-family: var(--font-comfortaa);
-  font-size: 1.45rem;
-  font-variant-numeric: tabular-nums;
-  pointer-events: none;
-}
 
 
 /* ── GALLERY_MANUAL state ──────────────────────────────────────────────── */
@@ -366,28 +349,6 @@ body {
   text-align: center;
 }
 
-.gallery-back-btn {
-  position: absolute;
-  top: 0.8rem;
-  left: 0.8rem;
-  z-index: 10;
-  background: rgba(var(--frame-color-rgb), 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 20px;
-  font-family: var(--font-gotham);
-  font-size: 1.3rem;
-  padding: 0.5em 1.5em;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  transition: background var(--transition-press);
-}
-.gallery-back-btn.pressed {
-  transform: scale(0.96);
-  filter: brightness(0.85);
-}
 
 .gallery-indicator {
   position: absolute;

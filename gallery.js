@@ -86,32 +86,13 @@ export function destroyGallery() {
 // ── Internal ────────────────────────────────────────────────────────────────
 
 function _renderEmpty() {
-  const backBtn = document.createElement("button");
-  backBtn.className   = "gallery-back-btn";
-  backBtn.textContent = "← Back";
-  backBtn.addEventListener("click", () => {
-    showFeedback(backBtn);
-    _exit();
-  });
-
   const msg = document.createElement("p");
   msg.className   = "gallery-empty";
   msg.textContent = "No images available.";
-
-  _container.appendChild(backBtn);
   _container.appendChild(msg);
 }
 
 function _buildLayout() {
-  // Back button
-  const backBtn = document.createElement("button");
-  backBtn.className   = "gallery-back-btn";
-  backBtn.textContent = "← Back";
-  backBtn.addEventListener("click", () => {
-    showFeedback(backBtn);
-    _exit();
-  });
-
   // Image wrapper
   const imgWrap = document.createElement("div");
   imgWrap.className = "gallery-image-wrap";
@@ -146,7 +127,6 @@ function _buildLayout() {
     resetTimer();
   });
 
-  _container.appendChild(backBtn);
   _container.appendChild(prevBtn);
   _container.appendChild(imgWrap);
   _container.appendChild(nextBtn);

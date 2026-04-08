@@ -38,7 +38,6 @@ export function initCarousel(container, categories, order, startCategoryKey = nu
   clearEl(_container);
   if (_order.length === 0) return;
 
-  _buildIndicator();
   _buildCategorySlides();
 
   // Apply start slide, advancing to next category if it overflows this one
@@ -86,13 +85,6 @@ export function getCurrentSlideIndex() {
 
 // ── Internal ────────────────────────────────────────────────────────────────
 
-function _buildIndicator() {
-  const indicator = document.createElement("div");
-  indicator.className = "carousel-indicator";
-  indicator.id        = "carousel-indicator";
-  _container.appendChild(indicator);
-}
-
 /** Build _slides = [preview, ...gallery (up to CAROUSEL_MAX_CONTENT)] for current category. */
 function _buildCategorySlides() {
   const key     = _order[_catIndex];
@@ -127,9 +119,6 @@ function _showSlide() {
 
   highlightCategoryButton(key);
 
-  const ind = document.getElementById("carousel-indicator");
-  if (ind) ind.textContent = `${_slideIndex + 1} / ${_slides.length}`;
-
   const bgImg = document.createElement("img");
   bgImg.className = "carousel-bg";
   bgImg.src = src || "";
@@ -156,9 +145,7 @@ function _showSlide() {
 
   if (_container) {
     slide.style.opacity = "0";
-    // Insert before indicator so slides stay behind it
-    const indicator = document.getElementById("carousel-indicator");
-    _container.insertBefore(slide, indicator);
+    _container.appendChild(slide);
 
     requestAnimationFrame(() => {
       slide.style.transition = `opacity ${FADE_TRANSITION_MS}ms ease`;
@@ -193,7 +180,11 @@ function _onTouchEnd(e) {
   const absDx = Math.abs(dx);
   const absDy = Math.abs(dy);
 
-  if (Math.max(absDx, absDy) < SWIPE_THRESHOLD_PX) return;
+  if (Math.max(absDx, absDy) < SWIPE_THRESHOLD_PX) {
+    // Tap — open current image in gallery (delta 0 = same position)
+    _onInteract(_order[_catIndex], _slideIndex, 0);
+    return;
+  }
 
   let delta;
   if (absDx >= absDy) {
