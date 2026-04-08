@@ -1,7 +1,7 @@
 // state.js — State machine: EVENTS | DEFAULT_CAROUSEL | GALLERY_MANUAL
 
 import { initEvents,   updateEvents,   destroyEvents   } from "./events.js";
-import { initCarousel, destroyCarousel, getCurrentCategoryKey } from "./carousel.js";
+import { initCarousel, destroyCarousel, getCurrentCategoryKey, getCurrentSlideIndex } from "./carousel.js";
 import { initGallery,  switchGalleryCategory, destroyGallery } from "./gallery.js";
 
 export const STATE = {
@@ -17,7 +17,8 @@ let _categories        = {};     // full categories map
 let _deviceConfig      = {};     // device config from Firebase
 let _deviceId          = null;   // "tv1" | "tv2" | "tv3"
 let _reservations      = {};     // latest raw reservations snapshot
-let _savedCarouselKey  = null;   // category key to resume when returning to carousel
+let _savedCarouselKey   = null;   // category key to resume when returning to carousel
+let _savedCarouselSlide = 0;      // carousel slide index to resume from
 
 /**
  * Boot the state machine.
@@ -45,24 +46,24 @@ export function setCategories(categories) {
 
 /**
  * Transition to a new state.
- * @param {string} newState — one of STATE.*
- * @param {string} [categoryKey] — required when newState === GALLERY_MANUAL
+ * @param {string} newState          — one of STATE.*
+ * @param {string} [categoryKey]     — required when newState === GALLERY_MANUAL
+ * @param {number} [galleryStartIndex] — image index to open at in GALLERY_MANUAL (default 0)
  */
-export function transitionTo(newState, categoryKey = null) {
+export function transitionTo(newState, categoryKey = null, galleryStartIndex = 0) {
   if (newState === _current && newState !== STATE.GALLERY_MANUAL) return; // no-op
-
-  if (_current === STATE.DEFAULT_CAROUSEL) {
-    _savedCarouselKey = getCurrentCategoryKey();
-  }
 
   _teardown(_current);
 
   if (newState === STATE.GALLERY_MANUAL) {
     _previous = _current !== STATE.GALLERY_MANUAL ? _current : _previous;
+    if (_current === STATE.DEFAULT_CAROUSEL) {
+      _savedCarouselKey = categoryKey; // resume carousel at the category the user browsed
+    }
   }
 
   _current = newState;
-  _setup(newState, categoryKey);
+  _setup(newState, categoryKey, galleryStartIndex);
 }
 
 /** Re-evaluate which state should be active based on current time + reservations. */
@@ -97,7 +98,7 @@ export function currentState() {
 
 // ── Private ────────────────────────────────────────────────────────────────
 
-function _setup(state, categoryKey) {
+function _setup(state, categoryKey, galleryStartIndex = 0) {
   const order = _deviceConfig.categories_order || [];
 
   switch (state) {
@@ -106,17 +107,36 @@ function _setup(state, categoryKey) {
       break;
 
     case STATE.DEFAULT_CAROUSEL:
-      initCarousel(_container, _categories, order, _savedCarouselKey);
-      _savedCarouselKey = null;
+      initCarousel(_container, _categories, order, _savedCarouselKey, _onCarouselInteract, _savedCarouselSlide);
+      _savedCarouselKey   = null;
+      _savedCarouselSlide = 0;
       break;
 
     case STATE.GALLERY_MANUAL: {
       const cat    = _categories[categoryKey] || {};
       const images = cat.gallery_images || [];
-      initGallery(_container, images, categoryKey, _onGalleryExit);
+      initGallery(_container, images, categoryKey, _onGalleryExit, galleryStartIndex);
       break;
     }
   }
+}
+
+/**
+ * Called by carousel on user swipe.
+ * Maps carousel slide position → gallery image index and opens GALLERY_MANUAL.
+ *
+ * Carousel slides: [preview (index 0), gallery_images[0] (index 1), gallery_images[1] (index 2), ...]
+ * Gallery images:  [gallery_images[0], gallery_images[1], ...]
+ * So: galleryIndex = carouselSlideIndex - 1, adjusted by delta, clamped to valid range.
+ */
+function _onCarouselInteract(catKey, carouselSlideIndex, delta) {
+  const cat    = _categories[catKey] || {};
+  const images = cat.gallery_images || [];
+  if (images.length === 0) return;
+
+  // Convert carousel slide index to gallery index (slide 0 is preview, slide 1 = gallery[0])
+  const galleryIndex = Math.max(0, Math.min(images.length - 1, carouselSlideIndex - 1 + delta));
+  transitionTo(STATE.GALLERY_MANUAL, catKey, galleryIndex);
 }
 
 function _teardown(state) {
@@ -127,7 +147,13 @@ function _teardown(state) {
   }
 }
 
-function _onGalleryExit() {
+function _onGalleryExit(galleryIndex = 0) {
+  if (_previous === STATE.DEFAULT_CAROUSEL) {
+    // galleryIndex is 0-based into gallery_images[].
+    // Carousel slides: [preview(0), gallery[0](1), gallery[1](2), ...]
+    // "Following image" = gallery index + 1, mapped to carousel = galleryIndex + 1 + 1
+    _savedCarouselSlide = galleryIndex + 2;
+  }
   transitionTo(_previous || STATE.DEFAULT_CAROUSEL);
 }
 

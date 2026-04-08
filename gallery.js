@@ -17,8 +17,9 @@ let _imgEl       = null;  // current <img>
  * @param {string[]} images           — ordered array of image URLs
  * @param {string} categoryKey        — for button highlight
  * @param {function} onExit           — called when user exits (inactivity or back btn)
+ * @param {number} startIndex         — image index to open at (default 0)
  */
-export function initGallery(container, images, categoryKey, onExit) {
+export function initGallery(container, images, categoryKey, onExit, startIndex = 0) {
   _container = container;
   _images    = images || [];
   _index     = 0;
@@ -33,8 +34,9 @@ export function initGallery(container, images, categoryKey, onExit) {
     return;
   }
 
+  const clampedStart = Math.max(0, Math.min(_images.length - 1, startIndex));
   _buildLayout();
-  _renderImage(0, null);
+  _renderImage(clampedStart, null);
 
   // Swipe
   _container.addEventListener("touchstart", _onTouchStart, { passive: true });
@@ -228,6 +230,7 @@ function _onTouchEnd(e) {
 }
 
 function _exit() {
+  const index = _index;
   destroyGallery();
-  if (typeof _onExit === "function") _onExit();
+  if (typeof _onExit === "function") _onExit(index);
 }

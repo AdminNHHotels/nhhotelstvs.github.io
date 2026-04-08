@@ -341,28 +341,6 @@ body {
   pointer-events: none;
 }
 
-.carousel-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background: rgba(var(--frame-color-rgb), 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  font-size: 3.0rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--transition-press);
-}
-.carousel-nav-btn.pressed { transform: translateY(-50%) scale(0.92); filter: brightness(0.85); }
-.carousel-prev { left: 0.6rem; }
-.carousel-next { right: 0.6rem; }
 
 /* ── GALLERY_MANUAL state ──────────────────────────────────────────────── */
 .gallery-image-wrap {

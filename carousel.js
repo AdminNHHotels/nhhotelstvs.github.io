@@ -1,6 +1,6 @@
 // carousel.js — DEFAULT_CAROUSEL state: auto-cycles through categories and their images
 
-import { highlightCategoryButton, showFeedback, clearEl } from "./ui.js";
+import { highlightCategoryButton, clearEl } from "./ui.js";
 
 let _container    = null;
 let _categories   = {};
@@ -9,11 +9,8 @@ let _catIndex     = 0;
 let _slideIndex   = 0;
 let _slides       = [];   // [preview_url, ...content_urls] for the current category
 let _slideTimer   = null;
-let _inactTimer   = null;
-let _paused       = false;
-let _resumeMode   = false;  // true after inactivity resume
-let _resumeLeft   = 0;      // slides remaining in post-resume budget
-let _currentSlide = null;   // current slide DOM element (for fade-out)
+let _currentSlide = null; // current slide DOM element (for fade-out)
+let _onInteract   = null; // (catKey, slideIndex, delta) => void
 let _touchStartX  = 0;
 let _touchStartY  = 0;
 
@@ -23,27 +20,35 @@ let _touchStartY  = 0;
  * @param {Object} categories            — Firebase /categories/ map
  * @param {string[]} order               — category keys in display order
  * @param {string|null} startCategoryKey — resume from this category (optional)
+ * @param {Function|null} onInteract     — called with (catKey, slideIndex, delta) on user swipe
+ * @param {number} startSlideIndex       — slide index within the start category (default 0)
  */
-export function initCarousel(container, categories, order, startCategoryKey = null) {
+export function initCarousel(container, categories, order, startCategoryKey = null, onInteract = null, startSlideIndex = 0) {
   _container    = container;
   _categories   = categories;
   _order        = order.filter((k) => k in categories);
+  _onInteract   = onInteract;
   _catIndex     = 0;
   if (startCategoryKey) {
     const idx = _order.indexOf(startCategoryKey);
     if (idx >= 0) _catIndex = idx;
   }
-  _slideIndex   = 0;
-  _paused       = false;
-  _resumeMode   = false;
-  _resumeLeft   = 0;
   _currentSlide = null;
 
   clearEl(_container);
   if (_order.length === 0) return;
 
-  _buildNav();
+  _buildIndicator();
   _buildCategorySlides();
+
+  // Apply start slide, advancing to next category if it overflows this one
+  _slideIndex = startSlideIndex;
+  if (_slideIndex >= _slides.length) {
+    _catIndex   = (_catIndex + 1) % _order.length;
+    _slideIndex = 0;
+    _buildCategorySlides();
+  }
+
   _showSlide();
   _scheduleNext();
 
@@ -56,12 +61,10 @@ export function updateCarouselCategories(categories) {
   _categories = categories;
 }
 
-/** Tear down carousel — stop timers, clear content, remove highlight. */
+/** Tear down carousel — stop timer, clear content, remove highlight. */
 export function destroyCarousel() {
   clearTimeout(_slideTimer);
-  clearTimeout(_inactTimer);
   _slideTimer   = null;
-  _inactTimer   = null;
   _currentSlide = null;
   if (_container) {
     _container.removeEventListener("touchstart", _onTouchStart);
@@ -76,37 +79,17 @@ export function getCurrentCategoryKey() {
   return _order[_catIndex] || null;
 }
 
+/** Return the current slide index within the current category. */
+export function getCurrentSlideIndex() {
+  return _slideIndex;
+}
+
 // ── Internal ────────────────────────────────────────────────────────────────
 
-/**
- * Build persistent nav buttons and slide indicator into the container.
- * These stay across slide transitions; only .carousel-slide elements are swapped.
- */
-function _buildNav() {
-  const prevBtn = document.createElement("button");
-  prevBtn.className = "carousel-nav-btn carousel-prev";
-  prevBtn.textContent = "‹";
-  prevBtn.setAttribute("aria-label", "Previous");
-  prevBtn.addEventListener("click", () => {
-    showFeedback(prevBtn);
-    _navigate(-1);
-  });
-
-  const nextBtn = document.createElement("button");
-  nextBtn.className = "carousel-nav-btn carousel-next";
-  nextBtn.textContent = "›";
-  nextBtn.setAttribute("aria-label", "Next");
-  nextBtn.addEventListener("click", () => {
-    showFeedback(nextBtn);
-    _navigate(1);
-  });
-
+function _buildIndicator() {
   const indicator = document.createElement("div");
   indicator.className = "carousel-indicator";
   indicator.id        = "carousel-indicator";
-
-  _container.appendChild(prevBtn);
-  _container.appendChild(nextBtn);
   _container.appendChild(indicator);
 }
 
@@ -117,7 +100,7 @@ function _buildCategorySlides() {
   const preview = cat.button_image_url || (cat.gallery_images && cat.gallery_images[0]) || null;
   const content = (cat.gallery_images || []).slice(0, CAROUSEL_MAX_CONTENT);
   _slides = [preview, ...content].filter(Boolean);
-  if (_slides.length === 0) _slides = [null]; // keep at least one slot so indicator renders
+  if (_slides.length === 0) _slides = [null];
 }
 
 function _scheduleNext() {
@@ -126,49 +109,27 @@ function _scheduleNext() {
 }
 
 function _advance() {
-  if (_paused) return;
-
-  // In resume mode: count down budget; when exhausted, switch category immediately
-  if (_resumeMode) {
-    _resumeLeft--;
-    if (_resumeLeft <= 0) {
-      _nextCategory();
-      return;
-    }
-  }
-
   _slideIndex++;
   if (_slideIndex >= _slides.length) {
-    _nextCategory();
-  } else {
-    _showSlide();
-    _scheduleNext();
+    _catIndex   = (_catIndex + 1) % _order.length;
+    _slideIndex = 0;
+    _buildCategorySlides();
   }
-}
-
-function _nextCategory() {
-  _catIndex   = (_catIndex + 1) % _order.length;
-  _slideIndex = 0;
-  _resumeMode = false;
-  _resumeLeft = 0;
-  _buildCategorySlides();
   _showSlide();
   _scheduleNext();
 }
 
 function _showSlide() {
-  const key         = _order[_catIndex];
-  const cat         = _categories[key] || {};
-  const src         = _slides[_slideIndex];
-  const isPreview   = (_slideIndex === 0);
+  const key       = _order[_catIndex];
+  const cat       = _categories[key] || {};
+  const src       = _slides[_slideIndex];
+  const isPreview = (_slideIndex === 0);
 
   highlightCategoryButton(key);
 
-  // Update persistent indicator
   const ind = document.getElementById("carousel-indicator");
   if (ind) ind.textContent = `${_slideIndex + 1} / ${_slides.length}`;
 
-  // Blurred background fill
   const bgImg = document.createElement("img");
   bgImg.className = "carousel-bg";
   bgImg.src = src || "";
@@ -195,9 +156,9 @@ function _showSlide() {
 
   if (_container) {
     slide.style.opacity = "0";
-    // Insert before nav buttons so slides stay behind them
-    const firstNav = _container.querySelector(".carousel-nav-btn");
-    _container.insertBefore(slide, firstNav);
+    // Insert before indicator so slides stay behind it
+    const indicator = document.getElementById("carousel-indicator");
+    _container.insertBefore(slide, indicator);
 
     requestAnimationFrame(() => {
       slide.style.transition = `opacity ${FADE_TRANSITION_MS}ms ease`;
@@ -215,33 +176,6 @@ function _showSlide() {
   }
 }
 
-/** Called on any user interaction — pauses auto-advance and resets inactivity timer. */
-function _onUserInteract() {
-  if (!_paused) {
-    _paused = true;
-    clearTimeout(_slideTimer);
-  }
-  clearTimeout(_inactTimer);
-  _inactTimer = setTimeout(_onInactivity, INACTIVITY_MS);
-}
-
-/** Called when inactivity timer fires — resumes auto-advance with a limited budget. */
-function _onInactivity() {
-  _resumeMode = true;
-  _resumeLeft = CAROUSEL_RESUME_BUDGET;
-  _paused     = false;
-  _scheduleNext();
-}
-
-/** Navigate within the current category's slides. */
-function _navigate(delta) {
-  const newIdx = _slideIndex + delta;
-  _onUserInteract();
-  if (newIdx < 0 || newIdx >= _slides.length) return; // boundary — interact but don't move
-  _slideIndex = newIdx;
-  _showSlide();
-}
-
 // ── Touch / swipe ───────────────────────────────────────────────────────────
 
 function _onTouchStart(e) {
@@ -251,6 +185,8 @@ function _onTouchStart(e) {
 }
 
 function _onTouchEnd(e) {
+  if (!_onInteract) return;
+
   const t     = e.changedTouches[0];
   const dx    = t.clientX - _touchStartX;
   const dy    = t.clientY - _touchStartY;
@@ -259,11 +195,12 @@ function _onTouchEnd(e) {
 
   if (Math.max(absDx, absDy) < SWIPE_THRESHOLD_PX) return;
 
+  let delta;
   if (absDx >= absDy) {
-    if (dx > 0) _navigate(-1);
-    else        _navigate(1);
+    delta = dx > 0 ? -1 : 1;  // swipe right → prev, swipe left → next
   } else {
-    if (dy > 0) _navigate(-1);
-    else        _navigate(1);
+    delta = dy > 0 ? -1 : 1;  // swipe down  → prev, swipe up   → next
   }
+
+  _onInteract(_order[_catIndex], _slideIndex, delta);
 }

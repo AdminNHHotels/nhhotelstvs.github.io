@@ -20,9 +20,6 @@ const CAROUSEL_SLIDE_MS = 10_000;
 // Carousel: max gallery images shown per category (after the preview)
 const CAROUSEL_MAX_CONTENT = 5;
 
-// Carousel: max slides auto-advanced after user inactivity resume before switching category
-// (4 slides × 10s = 40s maximum post-resume budget per category)
-const CAROUSEL_RESUME_BUDGET = 4;
 
 // How long before event start should the reservation be shown (hours)
 // Overridden per-device from Firebase /devices/{id}/show_before_hours
