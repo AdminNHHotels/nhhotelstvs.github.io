@@ -144,6 +144,11 @@ function _showSlide() {
 
   // Category label only on the preview (first) slide
   if (isPreview) {
+    const title = document.createElement("div");
+    title.className   = "carousel-title";
+    title.textContent = cat.label || key;
+    slide.appendChild(title);
+
     const label = document.createElement("div");
     label.className   = "carousel-label";
     label.textContent = cat.label || key;
