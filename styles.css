@@ -45,6 +45,13 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Gotham Book Thin';
+  src: url('assets/Gotham Book Thin.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ── Reset & base ──────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -317,12 +324,12 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
-  font-family: var(--font-gotham);
+  font-family: 'Gotham Book Thin', 'Gotham Book', 'Gotham', 'Montserrat', Arial, sans-serif;
   font-size: clamp(4.5rem, 13vw, 10rem);
-  font-weight: 600;
+  font-weight: 300;
   text-align: center;
   line-height: 1.15;
-  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.6), 0 1px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 0 5px rgba(0, 0, 0, 0.75);
   pointer-events: none;
   width: 80%;
 }
