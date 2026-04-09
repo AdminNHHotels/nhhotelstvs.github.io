@@ -329,7 +329,7 @@ body {
   font-weight: 300;
   text-align: center;
   line-height: 1.15;
-  text-shadow: 1px 0 5px rgba(0, 0, 0, 0.75);
+  text-shadow: 5px 1px 12px rgba(0, 0, 0, 1);
   pointer-events: none;
   width: 80%;
 }
