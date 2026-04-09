@@ -63,10 +63,11 @@ export function destroyEvents() {
 // ── Internal helpers ───────────────────────────────────────────────────────
 
 function _getActiveReservations(reservations) {
-  const now = _nowMinutes();
+  const now       = _nowMinutes();
+  const activeKey = _deviceId ? `active_${_deviceId}` : "active_tv1"; // e.g. "active_tv1"
   return Object.values(reservations || {})
     .filter((r) => {
-      if (!r.active) return false;
+      if (!r[activeKey]) return false;
       const from = _parseTime(r.show_from);
       const end  = _parseTime(r.time_end);
       return from <= now && now <= end;
