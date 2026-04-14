@@ -159,10 +159,12 @@ function _showSlide() {
     slide.style.opacity = "0";
     _container.appendChild(slide);
 
-    requestAnimationFrame(() => {
-      slide.style.transition = `opacity ${FADE_TRANSITION_MS}ms ease`;
-      slide.style.opacity    = "1";
-    });
+    // Force a reflow so the browser commits opacity:0 before transitioning to 1.
+    // A single rAF is not reliable across cycles — the browser may batch the
+    // style changes and skip the animation on repeated slides.
+    void slide.offsetWidth;
+    slide.style.transition = `opacity ${FADE_TRANSITION_MS}ms ease`;
+    slide.style.opacity    = "1";
 
     if (_currentSlide) {
       const old = _currentSlide;
